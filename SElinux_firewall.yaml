@@ -1,0 +1,33 @@
+---
+- name: Configure SELinux and firewall
+  hosts: webserver
+  gather_facts: yes
+  become: yes
+  vars_files: vars.yaml
+  tasks: 
+    - name: Installing firewalld
+      dnf:
+        name: firewalld
+        state: present
+    - name: disable SElinux
+      replace: 
+        path: /etc/selinux/config
+        regexp: '^SELINUX=enforcing'
+        before: '^SELINUX=enforcing'
+        after: 'SELINUX=disabled'
+    - name: add firewall http and https
+      firewalld:
+        service: http
+        permanent: yes
+        state: enabled
+        zone: public
+    - name:
+      firewalld:
+        service: https
+        permanent: yes
+        state: enabled
+        zone: public
+    - name: reload service firewalld
+      systemd:
+        name: firewalld
+        state: reloaded

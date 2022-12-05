@@ -1,0 +1,29 @@
+---
+- name: Intalling and unarchive wordpress
+  hosts: webserver
+  vars_files: vars.yaml
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name:  Download and Unarchive tar.gz
+      unarchive: 
+        src: https://wordpress.org/latest.tar.gz
+        dest: /var/www/html/
+        remote_src: yes
+    - name: Copy Wordpress files to /var/www/html/
+      copy:
+        src: /var/www/html/wordpress/
+        dest: /var/www/html
+        remote_src: yes
+    - name: Change ownership of /var/www/html
+      file:
+        path: /var/www/html/
+        state: directory
+        recurse: yes
+        owner: apache
+        group: apache
+    - name: Restart Apache
+      systemd:
+        name: httpd
+        state: restarted
+

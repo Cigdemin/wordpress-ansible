@@ -1,0 +1,27 @@
+---
+- name:
+  hosts: webserver
+  gather_facts: yes
+  vars_files: vars.yaml
+  become: yes
+  tasks:
+    - name:
+      shell: |
+        dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y
+    - name:
+      shell: |
+        dnf install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y
+    - name:
+      shell: |
+        dnf module reset php -y
+    - name:
+      shell: |
+        dnf module install php:remi-8.0 -y -y
+    - name: PHP and related app installation
+      dnf: 
+        name: "{{ php_packages }}"
+        state: latest
+    - name: Restart Apache
+      systemd:
+        name: httpd
+        state: restarted

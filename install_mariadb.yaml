@@ -1,0 +1,25 @@
+---
+- name: installing MariaDB to Data server
+  hosts: database
+  gather_facts: yes
+  vars_files: vars.yaml
+  become: yes
+  tasks:
+    - name: Install MariaDB to Database (UBUNTU)
+      apt: 
+        name: "{{ mariadb_items }}"
+        state: fixed
+        update_cache: yes
+    - name: Start and enable MariaDB
+      systemd: 
+        name: mariadb
+        state: started
+        enabled: yes
+    - name: Install mysql module
+      apt:
+        name: mysql_db
+        state: latest
+    - name: Install mariadb agent to database
+      mysql_db:
+        name: database
+        state: present

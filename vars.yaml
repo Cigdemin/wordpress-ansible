@@ -1,0 +1,28 @@
+php_packages: 
+  - php
+  - php-mysqlnd
+  - php-dom 
+  - php-simplexml
+  - php-xml
+  - php-xmlreader
+  - php-curl
+  - php-exif
+  - php-ftp
+  - php-gd
+  - php-iconv
+  - php-json
+  - php-mbstring
+  - php-posix
+  - php-sockets
+  - php-tokenizer
+
+firewall_items:
+  - https
+  - http
+  
+mariadb_items:
+  - mariadb-server
+  - mysql-server
+  - mysql-client 
+  - python3-mysqldb
+  - libmysqlclient-dev
